@@ -23,7 +23,15 @@ catch(e){
 
 //get all contacts
 app.get('/contacts', (req, res) => {
-    res.status(200).json(contact);
+    let contactDetail = [];
+    contact.map((item) => {
+        const myContact = {
+        name : item.firstName + " " + item.lastName,
+        mobile : item.mobileNo
+    } 
+        contactDetail.push(myContact);
+    })
+    return res.status(200).json(contactDetail);
 });
 
 
@@ -34,7 +42,7 @@ app.get('/contacts/names', (req, res) => {
         let name = element.firstName +" "+ element.lastName;
         fullName.push(name);
     });
-    res.status(200).json(fullName);
+    return res.status(200).json(fullName);
 });
 
 
