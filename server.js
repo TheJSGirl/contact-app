@@ -1,11 +1,13 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
+const mysql = require('mysql2');
 const fs = require('fs');
 const port = 3000;
 const app = express();
 const expressValidator = require('express-validator');
 let contact =  fs.readFileSync('demo.json');
+const v1Routes = require('./routes/v1');
 
 
 
@@ -13,6 +15,10 @@ let contact =  fs.readFileSync('demo.json');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(expressValidator());
+
+//routes middleware
+app.use('/api', v1Routes);
+
  //reading data
  try{
     contact = JSON.parse(contact);
@@ -20,6 +26,7 @@ app.use(expressValidator());
 catch(e){
     console.log(e);
 }
+
 
 //get all contacts
 app.get('/contacts', (req, res) => {
