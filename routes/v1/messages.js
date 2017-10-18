@@ -5,8 +5,6 @@ let contact = fs.readFileSync('demo.json');
 const twilio = require('twilio');
 const tokens = require('../../tokens');
 
-console.log('tokens ------>', tokens);
-    
 
 //reading data
 try{
