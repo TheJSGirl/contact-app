@@ -9,8 +9,6 @@ const expressValidator = require('express-validator');
 let contact =  fs.readFileSync('demo.json');
 const v1Routes = require('./routes/v1');
 
-
-
 //middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
