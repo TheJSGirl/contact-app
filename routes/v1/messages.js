@@ -14,14 +14,6 @@ catch(e){
     console.log(e);
 }
 
-
-messages.route('/:mobileNo')
-    .post((req, res) => {
-        // console.log(req.params.mobileNo);
-        const [result] = contact.filter((item) => item.mobileNo === req.params.mobileNo);
-            console.log('result ======>>>>>',result);
-
-    })
 messages.route('/')
     .post((req, res) => {
 
@@ -32,9 +24,12 @@ messages.route('/')
     //    const result = contact.filter((item) => item.mobileNo !== req.body.mobileNo);
     //         console.log('result',result);
 
-       
+        //validation
+
+
  
                 var client = new twilio(accountSid, authToken);
+                const mobileNo = req.params.mobileNo;
                 
                         client.messages.create({
                             body: 'your OTP is' +" "+ Math.floor(Math.random()*899) + 10,
