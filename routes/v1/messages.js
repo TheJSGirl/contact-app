@@ -3,10 +3,10 @@ const pool = require('../../db');
 const fs = require('fs');
 let contact = fs.readFileSync('demo.json');
 const twilio = require('twilio');
-const helper = require('../../helper');
+const tokens = require('../../tokens');
 
-console.log('helper ------>', helper);
-
+console.log('tokens ------>', tokens);
+    
 
 //reading data
 try{
