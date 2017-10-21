@@ -1,60 +1,69 @@
 const messages = require('express').Router();
 const pool = require('../../db');
 const fs = require('fs');
-let contact = fs.readFileSync('demo.json');
 const twilio = require('twilio');
 const tokens = require('../../tokens');
 
 
-//reading data
-try{
-    contact = JSON.parse(contact);
-    console.log(contact);
-}
-catch(e){
-    console.log(e);
-}
-
 messages.route('/')
-    .post((req, res) => {
+    .post(async (req, res) => {
 
-    //    const result = contact.filter((item) => item.mobileNo !== req.body.mobileNo);
-    //         console.log('result',result);
+        try {
+            let messageBody = null;
 
-        //validation
+            if(!req.body.message){
+                messageBody = 'your OTP is' +' '+ Math.floor(Math.random()*899) + 10;
+            }
+            else {
+                messageBody = req.body.message;
+            }
+        
+            const client = new twilio(tokens.accountSid, tokens.authToken);
+            // const mobileNo = req.params.mobileNo;
+                                
+            const message = await client.messages.create({
+                body: messageBody,
+                to: '+91' + req.body.mobileNo,  // Text this number
+                from: '+14352222045' // From a valid Twilio number
+            });
 
+            // save the message to sent messages table if message.errorCode is null
+            if(message.errorCode === null){
+                const messageData = {
+                    message: req.body.message,
+                    sentTo: req.body.mobileNo,
+                    status: 1
+                }
+                const [query] = await pool.query('INSERT INTO messages SET ?', messageData);
+            }
+            
+            return res.status(200).json({
+                data: message.body,
+                status: 'ok',
+                message: 'successful'
+            });
+        }
+        catch(err){
+            console.error(err);
 
- 
-                var client = new twilio(accountSid, authToken);
-                // const mobileNo = req.params.mobileNo;
-                                    
-                        client.messages.create({
-                            body: 'your OTP is' +" "+ Math.floor(Math.random()*899) + 10,
-                            to: '+91'+req.body.mobileNo,  // Text this number
-                            from: '+14352222045' // From a valid Twilio number
-                        })
-                        .then((message) => {
-                            console.log(message);
-                            return res.status(200).json({
-                                data: message.body,
-                                status: 'ok',
-                                message: 'successful'
-                            });
-                            
-                        })
-                        .catch((err) => {
-
-                            if(err.status === 400){
-                                return res.status(400).json({
-                                    status: 'failed',
-                                    message: 'this no. is not verified'
-                                });
-                            }
-                            console.error(err)
-                        });
-              
-                    
-        // })
+            // save the message to failed messages table if message.errorCode is not null
+            
+            if(err.code !== null){
+                const messageData = {
+                    message: req.body.message,
+                    sentTo: req.body.mobileNo,
+                    status: 0
+                }
+                const [query] = await pool.query('INSERT INTO messages SET ?', messageData);
+            }
+            
+            if(err.status === 400){
+                return res.status(400).json({
+                    status: 'failed',
+                    message: err.message
+                });
+            }
+        }
     })
 
   

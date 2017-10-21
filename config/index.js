@@ -19,7 +19,7 @@ if(env === 'development'){
       host            : 'localhost',
       user            : 'root',
       password        : 'pinku',
-      database        : 'registerLogin'
+      database        : 'MessageApp'
     }
   }
 
@@ -29,7 +29,7 @@ else if(env === 'test'){
       host            : 'localhost',
       user            : 'root',
       password        : 'pinku',
-      database        : 'registerLogin_test'
+      database        : 'MessageApp_test'
     }
   }
 
