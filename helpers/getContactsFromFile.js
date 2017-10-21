@@ -7,13 +7,7 @@ module.exports = {
 
             // console.log('**file data from helper => ', fileData);
 
-            const newData = fileData.map((item) => {
-                const myContact = {
-                    name: item.firstName + ' ' + item.lastName,
-                    mobile: item.mobileNo
-                }
-            });
-            console.log('*******',newData);
+            console.log( fileData);
             return fileData;
         }
         catch(err){

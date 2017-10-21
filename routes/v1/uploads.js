@@ -8,11 +8,10 @@ const {getContactsFromFile}= require('../../helpers');
 
 
 uploads.route('/')
-    .post( fileUpload.single('file'),(req, res) => {
+    .post( fileUpload.single('file'),async (req, res) => {
         console.log(req.file);
-        console.log(req.body);
         //read the file
-        const contacts = getContactsFromFile(req.file.path);
+        const contacts = await getContactsFromFile(req.file.path);
         //map the data        
         console.log('**Contacts => ', contacts);
         //insert the data into the db

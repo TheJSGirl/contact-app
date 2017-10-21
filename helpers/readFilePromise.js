@@ -5,8 +5,10 @@ function readFilePromise(path) {
       fs.readFile(path, 'utf8', function (error, result) {
         if (error) {
           reject(error);
+          console.error(error);
         } else {
           resolve(result);
+          // console.log("result",result);
         }
       });
     });
